@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peer-org1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: peer-org1
+  template:
+    metadata:
+      labels:
+        app: peer-org1
+    spec:
+      containers:
+      - name: peer-org1-container
+        image: hyperledger/fabric-peer:latest
+        env:
+        - name: CORE_PEER_ID
+          value: "peer0.org1.example.com"
+        - name: CORE_PEER_ADDRESS
+          value: "peer0.org1.example.com:7051"
+        - name: CORE_PEER_LISTENADDRESS
+          value: "0.0.0.0:7051"
+        - name: CORE_PEER_CHAINCODEADDRESS
+          value: "peer0.org1.example.com:7052"
+        - name: CORE_PEER_CHAINCODELISTENADDRESS
+          value: "0.0.0.0:7052"
+        - name: CORE_PEER_MSPCONFIGPATH
+          value: "/etc/hyperledger/msp/users/Admin@org1.example.com/msp" # Updated path
+        volumeMounts:
+        - name: msp-volume
+          mountPath: /etc/hyperledger/msp
+      volumes:
+      - name: msp-volume
+        hostPath:
+          path: /Users/fernando/Projects/GithubProjects/OSC-IS/OSC-IS_Doc/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp  # Updated path
